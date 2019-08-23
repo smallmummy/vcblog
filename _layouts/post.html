@@ -19,7 +19,7 @@ layout: default
                         {% if author.avatar %}
                         <img class="rounded-circle" src="{{site.baseurl}}/{{author.avatar}}" alt="{{author.name}}" width="70"/>
                         {% endif %}
-						<small class="ml-3"> {{ author.name }} <span><a target="_blank" href="{{ author.twitter }}" class="btn btn-outline-success btn-sm btn-round ml-1">Follow</a></span>
+						<small class="ml-3"> {{ author.name }} <span><a target="_blank" href="{{ author.linkedin }}" class="btn btn-outline-success btn-sm btn-round ml-1">Follow</a></span>
                             <span class="text-muted d-block mt-1">{{ page.date | date: '%b %d, %Y' }} · {% include meta-read-time.html %}</span>
 						</small>
 					</div>
@@ -42,25 +42,27 @@ layout: default
 	<div class="row justify-content-center">
         
         
-        <!-- Share -->
-		<div class="col-lg-2 pr-4 mb-4 col-md-12">
-			<div class="sticky-top sticky-top-offset text-center">
-				<div class="text-muted">
-					Share this
-				</div>
-				<div class="share d-inline-block">
-					<!-- AddToAny BEGIN -->
-					<div class="a2a_kit a2a_kit_size_32 a2a_default_style">
-						<a class="a2a_dd" href="https://www.addtoany.com/share"></a>
-						<a class="a2a_button_facebook"></a>
-						<a class="a2a_button_twitter"></a>
-					</div>
-					<script async src="https://static.addtoany.com/menu/page.js"></script>
-					<!-- AddToAny END -->
-				</div>
-			</div>
-		</div>
+					    <!-- Side Catalog Container -->
+        {% if page.catalog %}
+        <div class="col-lg-2 pr-4 mb-4 col-md-12">
+        <div class="sticky-top sticky-top-offset">
+        <div class="sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+        </div>
+        </div>
+        </div>
+        {% endif %}  
         
+     
+   
+     
         
 		<div class="col-md-12 col-lg-8">
             
@@ -137,15 +139,95 @@ layout: default
     <div class="container">
         <div class="row prevnextlinks small font-weight-bold">
           {% if page.previous.url %}
-            <div class="col-md-6 rightborder pl-0">
-                <a class="text-dark" href="{{ site.baseurl }}{{ page.previous.url }}">{% if page.previous.image %} <img height="30px" class="mr-1" src="{{site.baseurl}}/{{page.previous.image}}"> {% endif %} {{page.previous.title}}</a>
+  
+            <div class="alertbar-col-md-6 rightborder pl-0">          	
+                <a class="text-dark" href="{{ site.baseurl }}{{ page.previous.url }}">
+                	<i class="fas fa-arrow-left" style="font-size: 30px;margin: 12px 0px 0 5px;display: inline-block;"></i>
+                	{% if page.previous.image %} 
+                	<div style="display: inline;">
+                		<img height="40px" class="mr-1" style="margin: 5px;" src="{{site.baseurl}}/{{page.previous.image}}"> 
+                	{% endif %}
+                	</div>
+                	<div style="display: inline-block;position: absolute;margin: 10px 0 0 5px;text-decoration: underline;width: 75%;"> {{page.previous.title}}</div>
+              
+               	</a>
             </div>
           {% endif %}
           {% if page.next.url %}
-            <div class="col-md-6 text-right pr-0">
-                <a class="text-dark" href="{{ site.baseurl }}{{ page.next.url }}"> {{page.next.title}} {% if page.next.image %} <img height="30px" class="ml-1" src="{{site.baseurl}}/{{page.next.image}}"> {% endif %}</a>
+          
+            <div class="alertbar-col-md-6 text-right pr-0">
+                <a class="text-dark" href="{{ site.baseurl }}{{ page.next.url }}"> 
+                	<div style="display: block;position: absolute;margin: 10px 5px 0 0;text-decoration: underline;width: 70%;"> {{page.next.title}}</div>
+                	 {% if page.next.image %} 
+                	<div style="display: inline;">
+                		<img height="40px" class="ml-1" style="margin: 5px;" src="{{site.baseurl}}/{{page.next.image}}"> {% endif %}
+                	</div>
+                	<i class="fas fa-arrow-right" style="font-size: 30px;margin: 12px 0px 0 5px;"></i>
+                </a>
             </div>
+            
           {% endif %}
         </div>
     </div>
 </div>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- Side Catalog -->
+{% if page.catalog %}
+<script type="text/javascript">
+    function generateCatalog (selector) {
+        var P = $('article.article-post'),a,n,t,l,i,c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#"+$(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="'+i+'" rel="nofollow">'+t+'</a>');
+            l = $('<li class="'+n+'_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;    
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function(e){
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("{{ '/assets/js/jquery.nav.js' | prepend: site.baseurl }}", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 1000,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+    
+</script>
+{% endif %}
+

@@ -1,12 +1,14 @@
 # Site
-name: 'Mundana'
-description: 'Mundana is a free Jekyll theme for awesome people like you, Medium like.'
+name: 'VC Blog'
+description: 'This the Blog of Vincent Cheng, and my motto is Practice makes perfect.'
 logo: 'assets/images/logo.png'
-favicon: 'assets/images/favicon.ico'
+favicon: 'assets/images/favicon.png'
 baseurl: '/vcblog'
-disqus: 'demowebsite'
-email: 'wowthemesnet@gmail.com'
-mailchimp-list: 'https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b'
+disqus: 'smallmummy'
+email: 'smallmummy.vc@gmail.com'
+# link for subscribe in post page
+# mailchimp-list: 'https://wowthemes.us11.list-manage.com/subscribe/post?u=8aeb20a530e124561927d3bd8&amp;id=8c3d2d214b'
+
 
 include: ["_pages"]
 permalink: /:title/
@@ -19,21 +21,15 @@ plugins:
   - jekyll-seo-tag
   
 authors:
-    sal:
-      name:           Sal
-      site:           https://www.wowthemes.net
+    vincent_c:
+      name:           Vincent Cheng
+      site:           https://smallmummy.github.io
       avatar:         /assets/images/avatar1.jpg
-      bio:            "Hi, I am Sal, the author of Mundana, the theme you're currently previewing. I hope you like it!"
-      email:          wowthemesnet@gmail.com
+      bio:            "Hey, This is <strong>Vincent Cheng(VC)</strong>, a man who is fighting for his family.</p>    <p>A typical IT man in NZ with many hobbies, like music, coffee, cooking, running, cycling, fitness, camp and etc</p>    <p>This is the blog for me typically to record things related with teachnical knowledge and experience.</p>"
+      email:          smallmummy.vc@gmail.com
       twitter:        https://twitter.com/wowthemesnet
-
-    jane:
-      name:           Jane
-      site:           https://www.wowthemes.net
-      avatar:         /assets/images/avatar2.jpg
-      bio:            "Blogger, fashionista, love to explore new ideas and write on my morning coffee!"
-      email:          fakemail@gmail.com
-      twitter:        https://twitter.com/wowthemesnet
+      linkedin:       https://www.linkedin.com/in/vincent-cheng-0926b541/
+      github:					https://github.com/smallmummy
  
 # Defaults
 defaults:
@@ -43,7 +39,7 @@ defaults:
       path: "_posts"
     values:
       layout: post
-      author: sal
+      author: vincent-c
       avatar: /assets/images/avatar1.jpg
       
   # all pages
