@@ -24,7 +24,7 @@ authors:
     vincent_c:
       name:           Vincent Cheng
       site:           https://smallmummy.github.io
-      avatar:         /assets/images/avatar1.jpg
+      avatar:         assets/images/avatar1.jpg
       bio:            "Hey, This is <strong>Vincent Cheng(VC)</strong>, a man who is fighting for his family.</p>    <p>A typical IT man in NZ with many hobbies, like music, coffee, cooking, running, cycling, fitness, camp and etc</p>    <p>This is the blog for me typically to record things related with teachnical knowledge and experience.</p>"
       email:          smallmummy.vc@gmail.com
       twitter:        https://twitter.com/wowthemesnet
@@ -40,7 +40,7 @@ defaults:
     values:
       layout: post
       author: vincent-c
-      avatar: /assets/images/avatar1.jpg
+      avatar: assets/images/avatar1.jpg
       
   # all pages
   - scope:
