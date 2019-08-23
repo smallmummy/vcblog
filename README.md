@@ -1,17 +1,21 @@
-# Jekyll Theme - Mundana by WowThemes.net
+## 说明
 
-[Live Demo](https://wowthemesnet.github.io/mundana-theme-jekyll/) &nbsp; | &nbsp; 
-[Download](https://github.com/wowthemesnet/mundana-theme-jekyll/archive/master.zip) &nbsp; | &nbsp; 
-[Buy me a coffe](https://www.wowthemes.net/donate/) &nbsp; | &nbsp; [Documentation](https://bootstrapstarter.com/bootstrap-templates/mundana-theme-jekyll/) &nbsp; | &nbsp; 
-[WordPress version](https://www.wowthemes.net/themes/mundana-wordpress/) 
+### 用途
+此blog是为自己创建的一个技术blog，用于展示、记录一些技术性的日志。
 
-![mundana jekyll theme screenshot](assets/images/screenshot.jpg)
+### 环境
 
-### Documentation
+jekyll + github  
+有需要的同学可以fork自己的版本，用于搭建基于github的blog。 
+
+### 模板
+
+使用的是 Mundana Jekyll Theme, 然后根据自己的情况进行的修改,下面是模板的说明
+#### Documentation
 
 [How to install & use](https://bootstrapstarter.com/bootstrap-templates/mundana-theme-jekyll/)
 
-### Contribute to Mundana repository
+#### Contribute to Mundana repository
 
 1. In the top-right corner of this page, click **Fork**.
 
@@ -38,14 +42,61 @@
 That's it! Soon I'll be merging your changes into the master branch of this project. You will get a notification email once the changes have been merged. Thank you for your contribution.
 
 
-### Copyright
+### 个人定制化的地方
 
-Copyright (C) 2019 WowThemes.net.
+基于外表的简单定制,比如替换图片,修改了menu等等,就不在这里列举了. 这里只说明一下定制化的功能:
 
-Theme designed and developed by [Sal](https://www.wowthemes.net), *free* under MIT license. 
+#### 1. 在menu中增加了一个新的菜单项projec,用来列举一些正在或者已经完成的项目.
 
-<a href="https://www.wowthemes.net/donate/" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+在_includes下面的menu-header.html文件中添加新的引用,并增加新的project.html
 
-### Live Demo
+#### 2. 在post页面增加了catalog菜单/导航功能
 
-[Live Demo](https://wowthemesnet.github.io/mundana-theme-jekyll/)
+在_layouts下面的post.html文件中增加了后半段的代码.
+在assets/js/下面新增了功能需要的文件jquery.nav.js
+
+#### 3. 对post页面下方的文章导航(上一篇/下一篇)进行了功能优化
+在_layouts下面的post.html文件中`<!-- Aletbar Prev/Next -->`进行了优化
+
+#### 4. 对index页面的上方4篇文章进行了置顶
+修改了index.html中
+
+```
+{% assign latest_post = site.posts[0] %}
+```
+修改为了
+
+```
+{% assign latest_post = site.tags.stick_post[0] %}
+```
+
+需要在post中的MD文件(就是你编写的markdown文件)头部新增stick_post属性,例如
+
+```
+---
+layout:     post
+title:      The Experience of Scraping Instagram(Crawler)
+subtitle:   Crawler
+author:     vincent_c
+categories: [ crawler, python ]
+image: assets/images/crawler.jpg
+catalog: true
+tags: [Crawler, featured,stick_post]
+---  
+
+```
+
+在index.html下方的部分(置顶后的展示部分),修改为下面的部分,对paginator.posts的部分进行判断,如果已经置顶显示过了,此处就不在显示了.
+
+```
+{% for post in paginator.posts %}
+	{% if post.tags contains "stick_post" or post.tags contains "sticky" %}
+		
+		    {% continue %}
+			{% endif %}
+    
+  	
+  {% include main-loop-card.html %}
+    
+{% endfor %}
+```
