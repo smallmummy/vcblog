@@ -3,7 +3,7 @@ name: 'VC Blog'
 description: 'This the Blog of Vincent Cheng, and my motto is Practice makes perfect.'
 logo: 'assets/images/logo.png'
 favicon: 'assets/images/favicon.png'
-baseurl: '/vcblog'
+baseurl: ''
 disqus: 'smallmummy'
 email: 'smallmummy.vc@gmail.com'
 # link for subscribe in post page
