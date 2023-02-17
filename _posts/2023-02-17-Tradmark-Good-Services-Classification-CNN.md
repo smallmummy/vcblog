@@ -34,7 +34,7 @@ tags: [machine learning, python, featured,stick_post]
 
 <br><br/>
 
-Trademarks can be words, images, sounds, colors, or combinations thereof. One important thing for a tradmark is its class number and good-services description. There are 45 classes based on the Nice Classification (NCL), an international classification of goods and services used for trademark registration.
+Trademarks can be words, images, sounds, colors, or combinations thereof. One important thing for a tradmark is its class number and good-services description. There are 45 classes based on the Nice Classification (NCL), an international classification of goods and services used for trademark registration.  
 One of the key steps in examining a trademark application is determining the international class of the applied trademark based on the description of goods and services. I think it's a good idea to do this with a deep learning model. There are many methods or models that can do this, such as CNN, LSTM, RCNN, BERT. First, train a CNN model to see the effect.
 
 <br><br/>
@@ -48,17 +48,17 @@ There are official IP office data from many countries which could be as the data
 <center><div style="border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;">Figure: USPTO Bulk Data Storage System</div></center><br/>
 
 there are two parts of data:
-* base data which includes the data from 19 century to a certain time(currently it's the end of the year 2021)
+* base data which includes data from the 19 century to a specific time(currently it’s the end of the year 2021)
 * incremental data which would be generated daily 
 
-the base data is quite enough for us to traing this CNN classification model. After download them all by using a simple script, we could enter the data cleaning stage.
+the base data is quite enough for us to train this CNN classification model. After downloading them all by using a simple script, we could enter the data cleaning stage.
 
 <br><br/>
 
 ## Data Preparation
 
 ### Data Extraction
-firstly, we need to extract the class number and good-service text from the data source. Before we start the script, let’s look at the specification document named “Trademark-Applications-Documentation-v2.0-20220228.doc” which could also be downloaded from USPTO:
+firstly, we need to extract the class number and good-service text from the data source. Before we start the script, let’s look at the specification document named “Trademark-Applications-Documentation-v2.0-20220228.doc” which could also be downloaded from USPTO: 
 ![](https://raw.githubusercontent.com/smallmummy/blog_picture/master/trademark_good-service_text_classification_CNN/uspto_data_documentation_spec1.png)
 <center><div style="border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;">Figure: Trademark-Applications-Documentation-v2.0-20220228.doc</div></center><br/>
 
@@ -85,7 +85,7 @@ The following example is from the snippet for application number 72360420:
           </case-file-statements>
 ```
 
-There are 2 good-services as described in the code GS0261 and GS052, however, those class 26 and class 52 are PRIOR U.S. CLASSES OF GS, instead of NICE Classification. I didn’t find the NICE class number for that application in the XML. As the layman in IP trademark, I guess that USTPO stored the NICE class number in the XML after a certain year. Hence when we use Pyspark to fetch the class number and gs from the source data, I decide to process the data after 1990 only, to avoid the US class number mixed in.
+There are 2 good services as described in the code GS0261 and GS052, however, those class 26 and class 52 are PRIOR U.S. CLASSES OF GS, instead of NICE Classification. I didn’t find the NICE class number for that application in the XML. As the layman in IP trademark, I guess that USTPO stored the NICE class number in the XML after a certain year. Hence when we use Pyspark to fetch the class number and gs from the source data, I decide to process the data after 1990 only, to avoid the US class number mixed in.
 
 ![](https://raw.githubusercontent.com/smallmummy/blog_picture/master/trademark_good-service_text_classification_CNN/xml_snippet_1.png)
 <center><div style="border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;">Figure: Query from US IPO site</div></center><br/>
@@ -152,7 +152,7 @@ the following is the output for samples:
 only showing top 20 rows
 ```
 
-after we output them from Pyspark to a csv file, which could be as a staging file, we could go to the next stage: data cleaning
+after we output them from Pyspark to a CSV file, which could be as a staging file, we could go to the next stage: data cleaning
 
 <br><br/>
 
@@ -197,7 +197,7 @@ pd.set_option('display.float_format', lambda x: '%.0f' % x)
 df_dedup[["cls"]].describe()
 ```
 
-there are 940,472 good-service text could be used in model training, and we could see there is no US class number in (such as class 52 and etc)
+there are 940,472 good-service texts that could be used in model training, and we could see there is no US class number (such as class 52 and etc)
 
 |||
 ----|----
@@ -243,7 +243,7 @@ Corpus: English Wikipedia Dump of February 2017 and Vector size=300
 ![](https://raw.githubusercontent.com/smallmummy/blog_picture/master/trademark_good-service_text_classification_CNN/pre-trained_word2vec_matrix_download.png)
 <center><div style="border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;">Figure: Pre-trained Word2vec Matrix Downloading</div></center><br/>
 
-the following code could building our own based on the tokenized data in the previous step, and also record those words which didn't exist in the pre-trained word2vec matrix
+the following code could build our own based on the tokenized data in the previous step, and also record those words which didn’t exist in the pre-trained word2vec matrix
 ```
 import numpy as np
 
@@ -293,7 +293,7 @@ Name: 0.95, dtype: float64
 5% of df_no_exist_words = 1548.4
 ```
 
-the above stat is based on the count of no-exist words appear in the whole dataset, let's list the top 10 no-exist words based on that:
+the above stat is based on the count of no-exist words that appear in the whole dataset, let’s list the top 10 no-exist words based on that:  
 term|count
 -|-
 e|3568
@@ -306,9 +306,9 @@ x|1348
 rainwear|1140
 cardigans|1072
 
-I actually don't worry too much about them, because if some words not existed in the pre-trained word2vec matrix but it's important and repeats (appear) many times in the training data, I think the deep learning model could train and give the proper weight to them.
+I actually don’t worry too much about them, because if some words not existed in the pre-trained word2vec matrix but it’s important and repeats (appear) many times in the training data, I think the deep learning model could train and give the proper weight to them.
 
-from the above output, we could see there are 95% of no-exist words(30,968 * 95%) appear in the whole dataset less than 18 times, which I think we could ignore(though the model would train and I don't think those non-important words which appear rarely would gain some weight) 
+from the above output, we could see there are 95% of no-exist words(30,968 * 95%) appear in the whole dataset less than 18 times, which I think we could ignore(though the model would train and I don’t think those non-important words which appear rarely would gain some weight)
 
 
 <br><br/>
@@ -316,11 +316,11 @@ from the above output, we could see there are 95% of no-exist words(30,968 * 95%
 
 ### Model Structure
 
-Based on the classic CNN model structure(refer to the below for the model diagram), I create my own CNN model.
+Based on the classic CNN model structure(refer to the below for model diagram), I create my own CNN model.  
 ![](https://raw.githubusercontent.com/smallmummy/blog_picture/master/trademark_good-service_text_classification_CNN/classic_cnn_model_diagram.png)
 <center><div style="border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;">Figure: Classic CNN Diagram</div></center><br/>
 
-of course, my first model is a crap and gain a not high enough accuracy. Hyper-parameter tunning is a painful work for me, after lots of tries and adjustment on the model, the last model like below:
+of course, my first model is crap and does gain a not high enough accuracy. Hyper-parameter tunning is painful work for me, after lots of tries and adjustments on the model, the last model is like the below:
 
 
 ![](https://raw.githubusercontent.com/smallmummy/blog_picture/master/trademark_good-service_text_classification_CNN/cnn_model_v1_1.png)
@@ -329,23 +329,23 @@ of course, my first model is a crap and gain a not high enough accuracy. Hyper-p
 
 ### Details on the process
 
-firstly, I got the over-fitting with not surprisingly as shown in the below picture:
+firstly, I got the over-fitting not surprisingly as shown in the below picture:  
 
 ![](https://raw.githubusercontent.com/smallmummy/blog_picture/master/trademark_good-service_text_classification_CNN/over_fitting_diagram_1.png)
 <center><div style="border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;">Figure: Output Digram From a Over-fitting Model</div></center><br/>
 
-from the 2nd epoch, the loss of validation set is increasing and the accuracy is not convergent.
+from the 2nd epoch, the loss of the validation set is increasing and the accuracy is not convergent.
 
-after I added the extra Dropout layer with 50% dropping and also used L2-Regularization, I got this:
+after I added the extra Dropout layer with 50% dropping and also used L2-Regularization, I got this:   
 ![](https://raw.githubusercontent.com/smallmummy/blog_picture/master/trademark_good-service_text_classification_CNN/test_set_highter_than_training_set.png)
 <center><div style="border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;">Figure: Output Digram From a Over-fitting Model</div></center><br/>
 
-this time, the loss of train set and validation set didn't go far away with each other, but the werid thing is the accuracy of validation is higher than that of training. then I increase the batch_size from 64 to 256 and also train the model with 80% data. then I got a not-bad pciture:
+this time, the loss of the train set and validation set didn’t go far away with each other, but the weird thing is the accuracy of validation is higher than that of training. then I increase the batch_size from 64 to 256 and also train the model with 80% data. then I got a not-bad picture:
 
 ![](https://raw.githubusercontent.com/smallmummy/blog_picture/master/trademark_good-service_text_classification_CNN/output_diagram_batch_size_256.png)
 <center><div style="border-bottom: 1px solid #d9d9d9;display: inline-block;color: #999;">Figure: Output Digram of a Batch_size 256 model</div></center><br/>
 
-the accuracy on test set is 86.88%, then I continue to increase the batch_size t0 512 and train it with full data (940,472 records), at last I got 87.72% on accuracy
+the accuracy on the test set is 86.88%, then I continue to increase the batch_size t0 512 and train it with full data (940,472 records), at last, I got 87.72% accuracy
 
 
 ![](https://raw.githubusercontent.com/smallmummy/blog_picture/master/trademark_good-service_text_classification_CNN/output_diagram_last_model.png)
